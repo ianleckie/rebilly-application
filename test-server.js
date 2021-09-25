@@ -8,6 +8,7 @@ const path       = require( 'path' );
 const fs         = require( 'fs' );
 
 // variables
+const port            = 8080;
 const successToken    = 'SUCCESS-TOKEN';
 const badToken        = 'Bad token';
 const missingToken    = 'Missing token';
@@ -19,7 +20,7 @@ app.use( parser.json() ).post( '/gentoken', ( request, response ) => {
 
 	let output = {};
 
-	// if posting value is valid output the success token
+	// if posting value is valid, output the success token
 	if ( request.body.posting === 7 ) {
 
 		output = { token: successToken };
@@ -55,7 +56,7 @@ app.post( '/apply', ( request, response, next ) => {
 		
 		}
 
-		// if the token value is valid save the request data and output a random application id
+		// if the token value is valid, save the request data and output a random application id
 		if ( fields.token === successToken) {
 
 			// add the application ID to the field data
@@ -64,16 +65,16 @@ app.post( '/apply', ( request, response, next ) => {
 			// save request fields as a JSON file in the applications directory
 			const fieldsJSON = JSON.stringify( fields, null, 4 );
 
-			fs.writeFileSync( path.join( process.cwd(), applicationsDir, applicationId + '-' + fields.email + '.json' ), fieldsJSON, ( jsonError ) => {
+			fs.writeFileSync( path.join( process.cwd(), applicationsDir, applicationId + '-' + fields.email + '.json' ), fieldsJSON, ( fileError ) => {
 				
-				if ( jsonError ) { throw jsonError }			
+				if ( fileError ) { throw fileError }			
 			
 			});
 
 			// move the uploaded resume file to the applications directory
-			fs.rename( files.resume.path, path.join( process.cwd(), applicationsDir, applicationId + '-' + fields.email + '-' + files.resume.name ), ( fileError ) => {				
+			fs.rename( files.resume.path, path.join( process.cwd(), applicationsDir, applicationId + '-' + fields.email + '-' + files.resume.name ), ( resumeError ) => {				
 				
-				if ( fileError ) { throw fileError }
+				if ( resumeError ) { throw resumeError }
 			
 			});
 
@@ -95,4 +96,4 @@ app.post( '/apply', ( request, response, next ) => {
 
 });
 
-const server = app.listen( 8080, console.log( 'Test server listening...' ) );
+const server = app.listen( port, console.log( 'Test server listening...' ) );
