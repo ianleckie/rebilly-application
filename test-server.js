@@ -98,4 +98,4 @@ app.post( '/apply', ( request, response, next ) => {
 
 });
 
-const server = app.listen( port, console.log( 'Test server listening...' ) );
+const server = app.listen( port, console.log( 'Test server listening at http://localhost:' + port ) );
