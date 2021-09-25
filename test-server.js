@@ -58,12 +58,13 @@ app.post( '/apply', ( request, response, next ) => {
 		if ( fields.token === successToken) {
 			
 			const applicationId = Math.floor( ( Math.random() * 100000 ) + 1 );
-			const fieldsJSON    = JSON.stringify( fields, null, 4 );
-			const fieldsFile    = applicationId + '-' + fields.email + '.json';
-			const resumeFile    = applicationId + '-' + fields.email + '-' + files.resume.name;
 
 			// add the application ID to the field data
 			fields.applicationId = applicationId;
+			
+			const fieldsJSON = JSON.stringify( fields, null, 4 );
+			const fieldsFile = applicationId + '-' + fields.email + '.json';
+			const resumeFile = applicationId + '-' + fields.email + '-' + files.resume.name;
 
 			// save request fields as a JSON file in the applications directory
 			fs.writeFileSync( path.join( process.cwd(), applicationsDir, fieldsFile ), fieldsJSON, ( fileError ) => {
