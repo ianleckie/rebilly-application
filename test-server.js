@@ -44,8 +44,6 @@ app.post( '/apply', ( request, response, next ) => {
 	let output = {};
 	
 	const form = formidable({ multiples: true });
-	
-	const applicationId = Math.floor( ( Math.random() * 100000 ) + 1 );
 
 	form.parse( request, ( formError, fields, files ) => {
 		
@@ -58,13 +56,14 @@ app.post( '/apply', ( request, response, next ) => {
 
 		// if the token value is valid, save the request data and output a random application id
 		if ( fields.token === successToken) {
+			
+			const applicationId = Math.floor( ( Math.random() * 100000 ) + 1 );
+			const fieldsJSON    = JSON.stringify( fields, null, 4 );
+			const fieldsFile    = applicationId + '-' + fields.email + '.json';
+			const resumeFile    = applicationId + '-' + fields.email + '-' + files.resume.name;
 
 			// add the application ID to the field data
 			fields.applicationId = applicationId;
-			
-			const fieldsJSON = JSON.stringify( fields, null, 4 );
-			const fieldsFile = applicationId + '-' + fields.email + '.json';
-			const resumeFile = applicationId + '-' + fields.email + '-' + files.resume.name;
 
 			// save request fields as a JSON file in the applications directory
 			fs.writeFileSync( path.join( process.cwd(), applicationsDir, fieldsFile ), fieldsJSON, ( fileError ) => {
