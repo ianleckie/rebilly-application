@@ -62,19 +62,21 @@ app.post( '/apply', ( request, response, next ) => {
 			// add the application ID to the field data
 			fields.applicationId = applicationId;
 			
-			// save request fields as a JSON file in the applications directory
 			const fieldsJSON = JSON.stringify( fields, null, 4 );
+			const fieldsFile = applicationId + '-' + fields.email + '.json';
+			const resumeFile = applicationId + '-' + fields.email + '-' + files.resume.name;
 
-			fs.writeFileSync( path.join( process.cwd(), applicationsDir, applicationId + '-' + fields.email + '.json' ), fieldsJSON, ( fileError ) => {
+			// save request fields as a JSON file in the applications directory
+			fs.writeFileSync( path.join( process.cwd(), applicationsDir, fieldsFile ), fieldsJSON, ( fileError ) => {
 				
-				if ( fileError ) { throw fileError }			
+				if ( fileError ) throw fileError;		
 			
 			});
 
 			// move the uploaded resume file to the applications directory
-			fs.rename( files.resume.path, path.join( process.cwd(), applicationsDir, applicationId + '-' + fields.email + '-' + files.resume.name ), ( resumeError ) => {				
+			fs.rename( files.resume.path, path.join( process.cwd(), applicationsDir, resumeFile ), ( resumeError ) => {				
 				
-				if ( resumeError ) { throw resumeError }
+				if ( resumeError ) throw resumeError;
 			
 			});
 
