@@ -3,6 +3,9 @@ applications/*.json
 
 *.DS_Store
 
+my-info.json
+*.pdf
+
 # Logs
 logs
 *.log
